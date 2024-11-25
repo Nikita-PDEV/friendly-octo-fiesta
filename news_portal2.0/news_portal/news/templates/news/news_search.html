@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск новостей</title>
+</head>
+<body>
+    <h1>Поиск новостей</h1>
+    <form method="get" action="{% url 'news-search' %}">
+        <label for="title">Название:</label>
+        <input type="text" id="title" name="title">
+        <br>
+        <label for="author">Автор:</label>
+        <input type="text" id="author" name="author">
+        <br>
+        <label for="created_after">Дата (не раньше):</label>
+        <input type="date" id="created_after" name="created_after">
+        <br>
+        <button type="submit">Поиск</button>
+    </form>
+
+    <h2>Результаты поиска:</h2>
+    <ul>
+        {% for news in object_list %}
+            <li>
+                <a href="{% url 'news-update' news.pk %}">{{ news.title }}</a> - {{ news.author }}
+                <form method="post" action="{% url 'news-delete' news.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Новостей не найдено.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'news-list' %}">Назад к списку новостей</a>
+</body>
+</html>
